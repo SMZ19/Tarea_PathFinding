@@ -10,6 +10,7 @@
 
 #include <QWidget>
 #include <QKeyEvent>
+#include "crusader.h"
 
 class knight : public QWidget {
 
@@ -26,12 +27,15 @@ protected:
     void drawLines(QPainter *qp);
 
 private:
+    QRect crusaderRect;
     QImage knightImg;
-    QImage crusaderImg;
+
     QImage shieldImg;
+
+    crusader crusaderList[19];
     static const int filas = 15;
     static const int columnas = 15;
-    bool mapMatrix[columnas][filas];
+    int mapMatrix[columnas][filas];
 
     static const int B_WIDTH = 800;
     static const int B_HEIGHT = 800;
@@ -60,7 +64,8 @@ private:
     int maxDivX  = 0;
     int maxDivY  = 0;
     int squareSize = 50;
-
+    QRect knightRect;
+    QRect shieldRect;
     void loadImages();
     void initGame();
     void locateCrusader();
@@ -71,6 +76,7 @@ private:
     void doDrawing();
     void gameOver(QPainter &);
     void getDimensions(int , int);
+    int generateRnd();
 };
 
 

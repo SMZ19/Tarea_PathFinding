@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 project(pathfinding)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES knight.cpp knight.h main.cpp)
+set(SOURCE_FILES knight.cpp knight.h main.cpp crusader.cpp crusader.h)
 # Include a library search using find_package()
 # via REQUIRED, specify that libraries are required
 find_package(Qt5Core REQUIRED)

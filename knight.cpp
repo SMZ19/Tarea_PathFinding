@@ -7,6 +7,7 @@
 #include <QPainter>
 #include <QTime>
 #include <iostream>
+#include <random>
 using namespace std;
 
 
@@ -28,7 +29,14 @@ knight::knight(QWidget *parent) : QWidget(parent) {
 void knight::loadImages() {
 
     knightImg.load("/home/smz/CLionProjects/pathfinding/Images/helmet.png");
-    crusaderImg.load("/home/smz/CLionProjects/pathfinding/Images/crusader.png");
+    for(int i= 0; i<19; i++) {
+        crusader crusader;
+        crusaderList[i] = crusader;
+
+        crusaderList[i].crusaderImg.load("/home/smz/CLionProjects/pathfinding/Images/crusader.png");
+
+
+    }
     shieldImg.load("/home/smz/CLionProjects/pathfinding/Images/shield.png");
 }
 
@@ -71,9 +79,17 @@ void knight::doDrawing() {
     }
 
     if (inGame) {
+        for(int i= 0; i<19; i++) {
+            crusaderList[i].crusaderRect.setRect(crusaderList[i].posX,crusaderList[i].posY,squareSize,squareSize);
+            qp.fillRect(crusaderList[i].posX,crusaderList[i].posY,squareSize,squareSize,Qt::green);
+            crusaderList[i].crusaderImg.scaled(10,10,Qt::KeepAspectRatio);
+            qp.drawImage(crusaderList[i].posX,crusaderList[i].posY,crusaderList[i].crusaderImg);
 
-        qp.drawImage(crusaderImg_x, crusaderImg_y, crusaderImg);
+        }
+
         qp.drawImage(shieldImg_x,shieldImg_y,shieldImg);
+        knightRect.setRect(x+10,y,30,squareSize);
+        qp.fillRect(x+20,y,30,squareSize,Qt::cyan);
         qp.drawImage(x, y, knightImg);
 
 
@@ -99,10 +115,17 @@ void knight::gameOver(QPainter &qp) {
 }
 
 void knight::checkPositions() {
-
-    if ((x == crusaderImg_x) && (y == crusaderImg_y)) {
-        locateCrusader();
-    }else if((x == shieldImg_x) && (y == shieldImg_y)){
+    for(int i = 0; i<19;i++) {
+        if (crusaderList[i].crusaderRect.intersects(knightRect)) {
+            cout << "Chocoooooooooooo" << endl;
+                int num = (rand() % 20) + 1;
+                x = x + num;
+                int num2 = (rand() % 20) + 1;
+                y= y + num2;
+            //locateCrusader();
+        }
+    }
+    if(shieldRect.intersects(knightRect)){
         locateShield();
     }
 }
@@ -143,24 +166,55 @@ void knight::checkCollision() {
 
 void knight::locateCrusader() {
 
-    QTime time = QTime::currentTime();
-    qsrand((uint) time.msec());
+    for (int i = 0; i < 15; ++i) {
+        for(int n = 0; n<15 ; n++) {
+            int num = (rand() % 10) + 1;
+            mapMatrix[n][i] = num;
+        }
+    }
+    int counter =0;
+    for (int i = 0; i < 15; i++) {
+        for(int n = 0; n<15 ; n++) {
+            if( mapMatrix[n][i] == 7){
 
-    int r = qrand() % RAND_POS;
-    crusaderImg_x = (r * DOT_SIZE);
+                if(counter < 19) {
+                    crusaderList[counter].posX = (n * 50);
+                    crusaderList[counter].posY = (i * 50);
+                    counter++;
+                    break;
+                }
+            }
 
-    r = qrand() % RAND_POS;
-    crusaderImg_y = (r * DOT_SIZE+100);
+
+        }
+    }
+
+
+
 }
+int knight::generateRnd(){
+    int num = (rand() % 500) + 1;
+    return num;
+}
+
 void knight::locateShield() {
 
-    QTime time = QTime::currentTime();
-    qsrand((uint) time.msec());
 
-    int r = qrand() % RAND_POS;
-    shieldImg_x = (r * DOT_SIZE);
-    r = qrand() % RAND_POS;
-    shieldImg_y=(r * DOT_SIZE);
+    int randX;
+    int randY;
+    for(int i =0; i < 19; i++) {
+        randX = generateRnd();
+        randY = generateRnd();
+
+        if(!crusaderList[i].crusaderRect.contains(randX, randY)) {
+            shieldRect.setRect(randX,randY,25,25);
+            shieldImg_x = randX;
+
+            shieldImg_y = randY;
+        }
+    }
+
+
 
 }
 
