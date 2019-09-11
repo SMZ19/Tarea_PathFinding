@@ -16,22 +16,28 @@ class knight : public QWidget {
 public:
     knight(QWidget *parent = 0);
 
+
+
+
+
 protected:
     void paintEvent(QPaintEvent *);
     void timerEvent(QTimerEvent *);
-
+    void drawLines(QPainter *qp);
 
 private:
     QImage knightImg;
     QImage crusaderImg;
     QImage shieldImg;
-
+    static const int filas = 15;
+    static const int columnas = 15;
+    bool mapMatrix[columnas][filas];
 
     static const int B_WIDTH = 800;
     static const int B_HEIGHT = 800;
     static const int DOT_SIZE = 10;
     static const int ALL_DOTS = 900;
-    static const int RAND_POS = 29;
+    static const int RAND_POS = 50;
     static const int DELAY = 140;
 
     int timerId;
@@ -49,6 +55,12 @@ private:
     bool downDirection;
     bool inGame;
 
+    int dimX =0;
+    int dimY=0;
+    int maxDivX  = 0;
+    int maxDivY  = 0;
+    int squareSize = 50;
+
     void loadImages();
     void initGame();
     void locateCrusader();
@@ -58,6 +70,7 @@ private:
     void move();
     void doDrawing();
     void gameOver(QPainter &);
+    void getDimensions(int , int);
 };
 
 

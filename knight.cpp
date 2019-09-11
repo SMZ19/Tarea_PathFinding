@@ -6,6 +6,8 @@
 
 #include <QPainter>
 #include <QTime>
+#include <iostream>
+using namespace std;
 
 
 knight::knight(QWidget *parent) : QWidget(parent) {
@@ -18,6 +20,7 @@ knight::knight(QWidget *parent) : QWidget(parent) {
     inGame = true;
 
     resize(B_WIDTH, B_HEIGHT);
+    getDimensions(B_WIDTH,B_HEIGHT);
     loadImages();
     initGame();
 }
@@ -45,13 +48,27 @@ void knight::initGame() {
 void knight::paintEvent(QPaintEvent *e) {
 
     Q_UNUSED(e);
-
     doDrawing();
+}
+void knight::getDimensions(int dimX, int dimY) {
+
+    maxDivX = dimX / squareSize;
+    maxDivY = dimY / squareSize;
+    cout<<"MAX en X:"<<maxDivX<<endl;
+    cout<<"MAX en Y:"<<maxDivY<<endl;
+
 }
 
 void knight::doDrawing() {
 
     QPainter qp(this);
+    QPen pen(Qt::black, 1, Qt::SolidLine);
+    qp.setPen(pen);
+    for(int c = 0; c < maxDivX;c++){
+        for(int f = 0; f< maxDivY;f++){
+            qp.drawRect(c*squareSize,f*squareSize,squareSize,squareSize);
+        }
+    }
 
     if (inGame) {
 
@@ -101,7 +118,17 @@ void knight::move() {
             x -= DOT_SIZE;
         }
     }
-    y -= DOT_SIZE;
+    if(shieldImg_y > y){
+        y += DOT_SIZE;
+
+    }else {
+        if(shieldImg_y == y){
+
+        }else{
+            y -= DOT_SIZE;
+        }
+    }
+
 
 }
 
@@ -132,7 +159,8 @@ void knight::locateShield() {
 
     int r = qrand() % RAND_POS;
     shieldImg_x = (r * DOT_SIZE);
-    shieldImg_y=0;
+    r = qrand() % RAND_POS;
+    shieldImg_y=(r * DOT_SIZE);
 
 }
 
