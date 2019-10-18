@@ -8,6 +8,7 @@
 #include <QTime>
 #include <iostream>
 #include <random>
+#include "Bresenham.h"
 using namespace std;
 
 
@@ -28,16 +29,16 @@ knight::knight(QWidget *parent) : QWidget(parent) {
 
 void knight::loadImages() {
 
-    knightImg.load("/home/smz/CLionProjects/pathfinding/Images/helmet.png");
+    knightImg.load("/home/danium/Documents/TEC/Datos II/Tarea Pathfinding/Tarea_Pathfinding/Images/helmet.png");
     for(int i= 0; i<19; i++) {
         crusader crusader;
         crusaderList[i] = crusader;
 
-        crusaderList[i].crusaderImg.load("/home/smz/CLionProjects/pathfinding/Images/crusader.png");
+        crusaderList[i].crusaderImg.load("/home/danium/Documents/TEC/Datos II/Tarea Pathfinding/Tarea_Pathfinding/Images/crusader.png");
 
 
     }
-    shieldImg.load("/home/smz/CLionProjects/pathfinding/Images/shield.png");
+    shieldImg.load("/home/danium/Documents/TEC/Datos II/Tarea Pathfinding/Tarea_Pathfinding/Images/shield.png");
 }
 
 void knight::initGame() {
@@ -48,7 +49,6 @@ void knight::initGame() {
 
     locateShield();
     locateCrusader();
-
 
     timerId = startTimer(DELAY);
 }
@@ -165,7 +165,6 @@ void knight::checkCollision() {
 }
 
 void knight::locateCrusader() {
-
     for (int i = 0; i < 15; ++i) {
         for(int n = 0; n<15 ; n++) {
             int num = (rand() % 10) + 1;
@@ -223,11 +222,40 @@ void knight::timerEvent(QTimerEvent *e) {
     Q_UNUSED(e);
 
     if (inGame) {
-
         checkPositions();
         checkCollision();
+        int dx, dy, p, x_b, y_b;
+
+        dx=shieldImg_x-x;
+        dy=shieldImg_y-y;
+
+        p=2*dy-dx;
+        if(x<shieldImg_x)
+        {
+
+            if(p>=0)
+            {
+                std::cout<<"("<<x<<","<<y<<")"<<std::endl;
+                y=y+DOT_SIZE;
+                p=p+2*dy-2*dx;
+            }
+            else
+            {
+                std::cout<<"("<<x<<","<<y<<")"<<std::endl;
+                p=p+2*dy;
+            }
+            x=x+DOT_SIZE;
+        }
         move();
+        repaint();
     }
 
-    repaint();
+
+
+
 }
+
+void knight::mouseDoubleClickEvent(QMouseEvent *event) {
+    x = event->x();
+   y= event->y();
+};

@@ -77,6 +77,8 @@ private:
     void gameOver(QPainter &);
     void getDimensions(int , int);
     int generateRnd();
+
+    void mouseDoubleClickEvent(QMouseEvent *event);
 };
 
 
